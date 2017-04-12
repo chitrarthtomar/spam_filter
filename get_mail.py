@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #Author: Chitrarth Tomar
 import email
 import imaplib

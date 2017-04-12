@@ -1,5 +1,5 @@
+#!/usr/bin/python
 #Author: Chitrarth Tomar
-#import email
 import word_prob
 def check(a):
     '''
@@ -7,40 +7,40 @@ def check(a):
     and return True if it is a spam
     '''
     B=[]
-    B=a.split(" ")
+    a=a.replace(" ","@#$%%$#@").replace("\n","@#$%%$#@")
+    B=a.split("@#$%%$#@")
     C={}
     total=0;
     for token in B:
-        C[token]= 0
+        C[token.lower()]= 0
     for token in B:
-        C[token]+=1
+        C[token.lower()]+=1
         total+=1
     if "" in C: del C[""]
-    print (C)
+    for num in list(C):
+        if num.isnumeric():
+            del C[num]
+    print(C)
     return calc(C,total)
 
 
 def calc(wlist,total):
     '''
-    calculate probability of email
+    calculate probability of email being a spam
     '''
-    nr=1.00
-    dr=1.00
-    for w in wlist:
-        nr*=word_prob.prob(w)
-        dr*=(1-word_prob.prob(w))
+
+    p,np=word_prob.prob(wlist)
+    
     spam_prob=0.0
-    if(nr+dr!=0):
-        spam_prob=nr/(nr+dr)
+    if(p+np!=0):
+        spam_prob=p/(p+np)
     val=0;
-    #if(spam_prob>=0.80):
-        #considering new word in spam will be in spam again
-    word_prob.update(wlist,0.51,1,total)
-    return True;
-#    else:
-        #considering new word in non spam will not be in spam
-#        word_prob.update(wlist,0.4,0.01,total)
-#        return False;
+    if(spam_prob>=0.50):
+        word_prob.update(wlist,"spam",total)
+        return True;
+    else:
+        word_prob.update(wlist,"not_spam",total)
+        return False;
 f=open("testspam.txt","r")
 a=f.read()
 #print(a)

@@ -1,27 +1,66 @@
+#!/usr/bin/python
 #Author: Chitrarth Tomar
 import json
+import math
 fname='spam_count.json'
-def prob(w):
+notfname='not_spam_count.json'
+def prob(wlist):
     '''
     This function will return the probability of a word present in the mail.
     '''
+    p_spam=1.00
+    p_not_spam=1.00
     db=json.load(open(fname))
-    if w in db:
-        p=db[w]
-        return p
-    else:
-        return 0.4
+    notdb=json.load(open(notfname))
 
-def update(wlist,val,s,total):
+
+    for w in wlist:
+        if w in db:
+            p_spam+=math.log(db[w]/db["total_words_in_spam"])
+        if w in notdb:
+            p_not_spam+=math.log(notdb[w]/notdb["total_words_in_notspam"])
+
+    if "spam_count_total" in db:
+        p_spam+=math.log(db["spam_count_total"])
+    if "not_spam_count_total" in notdb:
+        p_not_spam+=math.log(notdb["not_spam_count_total"])
+    
+    return math.exp(p_spam),math.exp(p_not_spam)
+
+def update(wlist,what,total):
     '''
     Add word to the list.
     The probability is updated if word is present.
     '''
     db=json.load(open(fname))
+    notdb=json.load(open(notfname))
+
+    if "total_words_in_spam not" not in db:
+        db["total_words_in_spam"]=1
+    if "total_words_in_notspam" not in notdb:
+        notdb["total_words_in_notspam"]=1
+
+    if "spam_count_total" not in db:
+        db["spam_count_total"]=0
+    if "not_spam_count_total" not in notdb:
+        notdb["not_spam_count_total"]=0
+
     for w in wlist:
-        if w not in db:
-            db[w]=val
+        if what == "spam":
+            db["spam_count_total"]+=1
+            db["total_words_in_spam"]+=total
+            if w not in db:
+                db[w]=wlist[w]
+            else:
+                db[w]+=wlist[w]
         else:
-            db[w]=((s*val)+(wlist[w]*db[w]))/(1+wlist[w])
+            notdb["not_spam_count_total"]+=1
+            notdb["total_words_in_notspam"]+=total
+            if w not in notdb:
+                notdb[w]=wlist[w]
+            else:
+                notdb[w]+=wlist[w]
     with open(fname,'wt') as fn:
         json.dump(db,fn)
+    with open(notfname,'wt') as fn:
+        json.dump(notdb,fn)
