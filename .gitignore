@@ -47,3 +47,5 @@ Temporary Items
 .apdisk
 *.pyc
 *.txt
+spam_public/not_spam_count.json
+spam_public/spam_count.json

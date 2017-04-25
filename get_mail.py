@@ -1,5 +1,4 @@
-#!/usr/bin/python
-#Author: Chitrarth Tomar
+
 import email
 import imaplib
 import mailbox
@@ -28,9 +27,10 @@ while 1:
         for part in email_message.walk():
             if part.get_content_type() == "text/plain":
                 message=part.get_payload(decode=True).decode("utf-8")
-                message=regex.sub("<http.{0,}\.com.{0,}>",'',message)
-                message=regex.sub(r'([^\s\w]|_)+','',message)#add for $
-                a=check_mail.check(message.replace("\n","").replace("\r",""))
+                #print(message)
+                message=regex.sub("<http.{0,}\.com.{0,}>",'@#$%%$#@',message)
+                message=regex.sub(r'([^\s\w]|_)+','@#$%%$#@',message)#add for $
+                a=check_mail.check(message.replace("\n","@#$%%$#@").replace("\r","@#$%%$#@").replace(" ","@#$%%$#@").replace("\t","@#$%%$#@"))
                 if(a):
                     print("spam")
                 else:

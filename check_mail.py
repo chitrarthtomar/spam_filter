@@ -1,5 +1,4 @@
-#!/usr/bin/python
-#Author: Chitrarth Tomar
+
 import word_prob_new
 def check(a):
     '''
@@ -35,7 +34,7 @@ def calc(wlist,total):
         spam_prob=1/(1+p)
     val=0;
     print("Spam probability is "+str(spam_prob))
-    if(spam_prob>=0.50):
+    if(spam_prob>=0.27):#0.268941421 is the limiting condition
     #    word_prob_new.update(wlist,"spam",total)
         return True;
     else:
