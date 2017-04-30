@@ -4,8 +4,8 @@ import imaplib
 import mailbox
 import regex
 import check_mail
-EMAIL_ACCOUNT = "arduinouno1995@gmail.com"
-PASSWORD = "9686859627"
+EMAIL_ACCOUNT = "987654321@gmail.com"
+PASSWORD = "*********"
 mail = imaplib.IMAP4_SSL('imap.gmail.com')
 mail.login(EMAIL_ACCOUNT, PASSWORD)
 while 1:
